@@ -79,5 +79,24 @@ fun FirstActivity(modifier: Modifier = Modifier) {
         ) {
             Text("Позвонить другу! (он ждёт хехехе)")
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = {
+                if (text.isNotBlank()){
+                    val thirdIntent = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_TEXT, text)
+                    }
+                    if(thirdIntent.resolveActivity(context.packageManager) != null){
+                        context.startActivity(thirdIntent)
+                    }
+                }
+            },
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        ) {
+            Text("Друг велел делиться!")
+        }
     }
 }
