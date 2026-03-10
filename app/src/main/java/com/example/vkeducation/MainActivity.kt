@@ -1,6 +1,7 @@
 package com.example.vkeducation
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -33,6 +34,11 @@ fun FirstActivity(modifier: Modifier = Modifier) {
     var text by remember { mutableStateOf("") }
     val context = LocalContext.current
 
+    fun isValidPhoneNumber(input: String): Boolean {
+        val cleaned = input.replace(Regex("[\\s\\-()]"), "")
+        return cleaned.matches(Regex("^\\+?[1-9][0-9]{6,14}$"))
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -57,6 +63,21 @@ fun FirstActivity(modifier: Modifier = Modifier) {
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
             Text("Открыть вторую Activity")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = {
+                if(text.isNotBlank() && isValidPhoneNumber(text)){
+                    val uri = Uri.parse("tel:$text")
+                    val secondIntent = Intent(Intent.ACTION_DIAL, uri)
+                    context.startActivity(secondIntent)
+                }
+            },
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        ) {
+            Text("Позвонить другу! (он ждёт хехехе)")
         }
     }
 }
